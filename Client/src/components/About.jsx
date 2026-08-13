@@ -1,76 +1,82 @@
-import { useEffect, useState } from 'react'
-import { useInView } from '../hooks/useInView'
+import { FiUser, FiAward, FiBookOpen, FiBriefcase } from 'react-icons/fi'
 
-const FULL_TEXT = `I am a designer who codes.
-
-For the past nine years I have made digital products, brand systems, and the occasional generative thing — for studios, founders, and institutions that care about how a thing feels as much as how it works.
-
-My work begins with a long conversation and ends with a website, an app, or a system that can be read like a sentence: deliberate, finite, and quiet enough to be lived with.`
-
-export default function About() {
-  const [ref, inView] = useInView({ threshold: 0.3 })
-  const [text, setText] = useState('')
-  const [done, setDone] = useState(false)
-
-  useEffect(() => {
-    if (!inView) return
-    let i = 0
-    const interval = setInterval(() => {
-      i++
-      setText(FULL_TEXT.slice(0, i))
-      if (i >= FULL_TEXT.length) {
-        clearInterval(interval)
-        setDone(true)
-      }
-    }, 22)
-    return () => clearInterval(interval)
-  }, [inView])
-
-  const lines = text.split('\n')
+const About = () => {
+  const stats = [
+    { icon: FiBookOpen, label: 'Years of Study', value: '4+' },
+    { icon: FiBriefcase, label: 'Projects Done', value: '15+' },
+    { icon: FiAward, label: 'Certificates', value: '10+' },
+    { icon: FiUser, label: 'Happy Clients', value: '5+' },
+  ]
 
   return (
-    <section ref={ref} id="about" className="about section">
-      <div className="about-grid">
-        <div className="about-left">
-          <div className="mono section-label">— 02 / About</div>
-          <h2 className="display about-title">
-            A designer<br/>of restraint.
+    <section id="about" className="py-20 px-6 section-fade">
+      <div className="container mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            About <span className="gradient-text">Me</span>
           </h2>
-          <div className="mono about-meta">
-            <div>Mira Castellan · Independent</div>
-            <div>Lisbon · Nine years freelance</div>
-            <div>Available Spring 2025</div>
-          </div>
+          <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 mx-auto rounded-full"></div>
         </div>
 
-        <div className="about-right">
-          <div className="about-text">
-            {lines.map((line, i) => (
-              <p key={i}>
-                {line || '\u00A0'}
-                {i === lines.length - 1 && (
-                  <span className={`about-cursor ${done ? 'blink' : ''}`}>▌</span>
-                )}
-              </p>
-            ))}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left - Image */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-tr from-purple-600 to-cyan-600 rounded-3xl blur-2xl opacity-20"></div>
+            <div className="relative glass rounded-3xl overflow-hidden p-2">
+              <img
+                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=600&fit=crop"
+                alt="About Me"
+                className="rounded-2xl w-full"
+              />
+            </div>
           </div>
 
-          <div className="about-stats">
-            <div className="stat">
-              <div className="stat-num display">09</div>
-              <div className="mono stat-label">Years freelance</div>
+          {/* Right - Content */}
+          <div>
+            <h3 className="text-2xl font-bold mb-4 text-purple-400">
+              Final Year Computer Science Student
+            </h3>
+            <p className="text-gray-400 leading-relaxed mb-4">
+              I'm a passionate computer science student with a strong foundation in software 
+              engineering, algorithms, and modern web technologies. Throughout my academic journey, 
+              I've developed a keen interest in building scalable web applications and exploring 
+              the intersections of AI and web development.
+            </p>
+            <p className="text-gray-400 leading-relaxed mb-6">
+              I thrive in collaborative environments and enjoy tackling complex problems with 
+              innovative solutions. My goal is to leverage my skills to create meaningful impact 
+              through technology.
+            </p>
+
+            {/* Quick Info */}
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              <div className="glass rounded-xl p-4">
+                <p className="text-gray-500 text-sm">Name</p>
+                <p className="text-white font-semibold">John Doe</p>
+              </div>
+              <div className="glass rounded-xl p-4">
+                <p className="text-gray-500 text-sm">Email</p>
+                <p className="text-white font-semibold text-sm">john@email.com</p>
+              </div>
+              <div className="glass rounded-xl p-4">
+                <p className="text-gray-500 text-sm">Location</p>
+                <p className="text-white font-semibold">New York, USA</p>
+              </div>
+              <div className="glass rounded-xl p-4">
+                <p className="text-gray-500 text-sm">Availability</p>
+                <p className="text-green-400 font-semibold">Open to Work</p>
+              </div>
             </div>
-            <div className="stat">
-              <div className="stat-num display">62</div>
-              <div className="mono stat-label">Projects shipped</div>
-            </div>
-            <div className="stat">
-              <div className="stat-num display">14</div>
-              <div className="mono stat-label">Talks given</div>
-            </div>
-            <div className="stat">
-              <div className="stat-num display">04</div>
-              <div className="mono stat-label">Languages spoken</div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {stats.map((stat, index) => (
+                <div key={index} className="glass rounded-xl p-4 text-center card-hover">
+                  <stat.icon className="text-2xl text-purple-400 mx-auto mb-2" />
+                  <h4 className="text-2xl font-bold gradient-text">{stat.value}</h4>
+                  <p className="text-gray-500 text-xs">{stat.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -78,3 +84,5 @@ export default function About() {
     </section>
   )
 }
+
+export default About

@@ -1,95 +1,96 @@
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
-import { useInView } from '../hooks/useInView'
+import { FiHeart, FiDownload, FiArrowUp } from 'react-icons/fi'
+import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa'
 
-export default function Footer() {
-  const [ref, inView] = useInView({ threshold: 0.2 })
-  const root = useRef(null)
-  const [time, setTime] = useState('—:—')
+const Footer = () => {
+  const currentYear = new Date().getFullYear()
 
-  useEffect(() => {
-    const update = () => {
-      const lisbon = new Date().toLocaleTimeString('en-GB', {
-        timeZone: 'Europe/Lisbon', hour: '2-digit', minute: '2-digit'
-      })
-      setTime(lisbon)
-    }
-    update()
-    const t = setInterval(update, 30 * 1000)
-    return () => clearInterval(t)
-  }, [])
-
-  useEffect(() => {
-    if (!inView) return
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.footer-line',
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', stagger: 0.1 })
-      gsap.fromTo('.footer-col',
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.08, delay: 0.5 })
-    }, root)
-    return () => ctx.revert()
-  }, [inView])
+  const quickLinks = [
+    { name: 'Home', href: '#home' },
+    { name: 'About', href: '#about' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Contact', href: '#contact' },
+  ]
 
   return (
-    <footer ref={root} id="contact" className="footer section">
-      <div className="footer-inner">
-        <div className="mono section-label">— 07 / Contact</div>
-
-        <h2 className="display footer-title">
-          <span className="footer-line">Let\'s make</span><br/>
-          <span className="footer-line">something good<span className="footer-title-dot">.</span></span>
-        </h2>
-
-        <a href="mailto:hello@miracastellan.com" className="footer-cta mono footer-line">
-          <span>hello@miracastellan.com</span>
-          <span>→</span>
-        </a>
-
-        <div className="footer-grid">
-          <div className="footer-col">
-            <div className="mono footer-col-label">Based in</div>
-            <p>
-              Rua das Janelas Verdes 32<br/>
-              1200-690 Lisbon<br/>
-              Portugal
+    <footer className="glass border-t border-white/5 py-12 px-6">
+      <div className="container mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
+          {/* Brand */}
+          <div>
+            <h3 className="text-2xl font-bold gradient-text mb-4">&lt;Portfolio/&gt;</h3>
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">
+              Computer Science Student & Full Stack Developer passionate about building 
+              innovative web solutions and exploring new technologies.
             </p>
+            <a
+              href="/resume.pdf"
+              download
+              className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-full text-white text-sm font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all"
+            >
+              <FiDownload /> Download Resume
+            </a>
           </div>
-          <div className="footer-col">
-            <div className="mono footer-col-label">Direct</div>
-            <p>
-              <a href="mailto:hello@miracastellan.com">hello@miracastellan.com</a><br/>
-              +351 91 234 5678<br/>
-              Mon—Fri, 09:00—18:00 WET
-            </p>
-          </div>
-          <div className="footer-col">
-            <div className="mono footer-col-label">Elsewhere</div>
-            <ul className="footer-list">
-              <li><a href="#">Instagram — @mira.castellan</a></li>
-              <li><a href="#">Are.na — /mira-castellan</a></li>
-              <li><a href="#">Read.cv — /miracastellan</a></li>
-              <li><a href="#">GitHub — @miracastellan</a></li>
-              <li><a href="#">Newsletter — monthly</a></li>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-lg font-bold text-white mb-4">Quick Links</h4>
+            <ul className="space-y-2">
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                  >
+                    → {link.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="footer-col">
-            <div className="mono footer-col-label">Local time</div>
-            <p>
-              Lisbon · {time}<br/>
-              38.7223° N, 9.1393° W<br/>
-              Next opening · April 14
+
+          {/* Social */}
+          <div>
+            <h4 className="text-lg font-bold text-white mb-4">Connect With Me</h4>
+            <div className="flex gap-3 mb-4">
+              {[
+                { Icon: FaGithub, href: 'https://github.com', color: 'hover:bg-gray-700' },
+                { Icon: FaLinkedin, href: 'https://linkedin.com', color: 'hover:bg-blue-600' },
+                { Icon: FaTwitter, href: 'https://twitter.com', color: 'hover:bg-cyan-500' },
+                { Icon: FaInstagram, href: 'https://instagram.com', color: 'hover:bg-pink-600' },
+              ].map(({ Icon, href, color }, index) => (
+                <a
+                  key={index}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-10 h-10 glass rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all ${color}`}
+                >
+                  <Icon />
+                </a>
+              ))}
+            </div>
+            <p className="text-gray-500 text-sm">
+              📧 john@example.com<br />
+              📱 +1 (555) 123-4567
             </p>
           </div>
         </div>
 
-        <div className="footer-bottom">
-          <div className="mono">© 2025 Mira Castellan</div>
-          <div className="mono">All rights reserved · No reproduction without written consent</div>
-          <div className="mono">Designed & built in Lisbon · React + Vite + GSAP</div>
+        {/* Bottom Bar */}
+        <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-sm flex items-center gap-1">
+            © {currentYear} John Doe. Made with <FiHeart className="text-red-500" /> and React.
+          </p>
+          <a
+            href="#home"
+            className="w-10 h-10 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform"
+          >
+            <FiArrowUp />
+          </a>
         </div>
       </div>
     </footer>
   )
 }
+
+export default Footer
