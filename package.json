@@ -1,0 +1,17 @@
+{
+  "name": "portfolio-root",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Root for client and server portfolio project",
+  "scripts": {
+    "install:client": "npm install --prefix Client",
+    "install:server": "npm install --prefix Server",
+    "install": "npm run install:client && npm run install:server",
+    "dev:client": "npm run dev --prefix Client",
+    "start:server": "npm start --prefix Server",
+    "dev": "npm-run-all --parallel dev:client start:server"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
