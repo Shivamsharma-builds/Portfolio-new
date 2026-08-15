@@ -1,25 +1,43 @@
 {
-  "name": "portfolio-root",
+  "name": "portfolio",
   "private": true,
-  "version": "1.0.0",
-  "description": "Root for client and server portfolio project",
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "install:client": "npm install --prefix Client",
-    "install:server": "npm install --prefix Server",
-    "install": "npm run install:client && npm run install:server",
-    "dev:client": "npm run dev --prefix Client",
-    "start:server": "npm start --prefix Server",
-    "dev": "npm-run-all --parallel dev:client start:server"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "server": "node server/index.js",
+    "dev:full": "concurrently \"npm run dev\" \"npm run server\""
   },
-  "devDependencies": {
-    "autoprefixer": "^10.5.4",
-    "npm-run-all": "^4.1.5",
-    "postcss": "^8.5.26",
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "framer-motion": "^13.1.0",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26",
+    "mongodb": "^7.5.0",
+    "mongoose": "^8.24.3",
+    "nodemailer": "^7.0.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-icons": "^5.7.0",
     "tailwindcss": "^4.3.3"
   },
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "concurrently": "^9.2.1",
+    "eslint": "^10.8.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "vite": "^8.2.0"
+  }
 }
