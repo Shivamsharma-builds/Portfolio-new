@@ -3,6 +3,18 @@ import { FiCalendar, FiBriefcase } from 'react-icons/fi'
 const Experience = () => {
   const experiences = [
     {
+      role: 'Backend Developer Intern',
+      company: 'FlyRank AI',
+      duration: 'Jul 2026 - Sep 2026',
+      type: 'Internship',
+      description: 'Worked on developing and maintaining backend services using Node.js and Express. Implemented RESTful APIs and integrated third-party services to enhance application functionality.',
+      achievements: [
+        'Developed and deployed 5 RESTful APIs serving 20,000+ daily requests',
+        'Optimized database queries, reducing response time by 40%',
+        'Collaborated with frontend team to integrate APIs, improving user experience'
+      ]
+    },
+    {
       role: 'Software Engineering Intern',
       company: 'IEPSSOLS & Co.',
       duration: 'Apr 2026 - Jul 2026',
@@ -26,18 +38,7 @@ const Experience = () => {
         'Established long-term relationships with 5 recurring clients'
       ]
     },
-    {
-      role: 'Teaching Assistant - Data Structures',
-      company: 'Stanford University',
-      duration: 'Aug 2023 - Dec 2023',
-      type: 'Part-time',
-      description: 'Assisted professor in teaching data structures course to 100+ undergraduate students.',
-      achievements: [
-        'Conducted weekly lab sessions and office hours',
-        'Graded assignments and provided constructive feedback',
-        'Created supplementary study materials improving pass rate by 15%'
-      ]
-    },
+    
   ]
 
   return (
