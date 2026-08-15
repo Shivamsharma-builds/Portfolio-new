@@ -4,9 +4,9 @@ import profile2 from '../assets/images/profile2.png'
 const About = () => {
   const stats = [
     { icon: FiBookOpen, label: 'Years of Study', value: '4+' },
-    { icon: FiBriefcase, label: 'Projects Done', value: '15+' },
+    { icon: FiBriefcase, label: 'Projects Done', value: '5+' },
     { icon: FiAward, label: 'Certificates', value: '10+' },
-    { icon: FiUser, label: 'Happy Clients', value: '5+' },
+    { icon: FiUser, label: 'Happy Clients', value: '2+' },
   ]
 
   return (
