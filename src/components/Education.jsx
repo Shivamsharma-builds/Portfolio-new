@@ -17,8 +17,17 @@ const Education = () => {
       duration: '2022 - 2023',
       location: 'Jamtara, Jharkhand (India)',
       grade: '85%',
-      description: 'Graduated with honors. Top 5% of the class with focus on Mathematics and Computer Science.',
+      description: 'Top 5% of the class with focus on Mathematics and Computer Science.',
       courses: ['Advanced Mathematics', 'Physics', 'Computer Science', 'Chemistry']
+    },
+    {
+      degree: 'Secondary School - Matriculate',
+      institution: 'S.D D.A.V Public School',
+      duration: '2020 - 2021',
+      location: 'Jamtara, Jharkhand (India)',
+      grade: '85%',
+      description: 'Top 5% of the class with focus on Mathematics and Computer Science.',
+      courses: ['RDBMS', 'Python Programming', 'Computer Science']
     },
   ]
 
