@@ -148,7 +148,7 @@ const Projects = () => {
         {/* View More */}
         <div className="text-center mt-12">
           <a
-            href="https://github.com"
+            href="https://github.com/shivamsharma-builds"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 glass rounded-full text-white font-semibold hover:bg-white/10 transition-all"
