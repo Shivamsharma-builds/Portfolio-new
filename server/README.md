@@ -1,6 +1,16 @@
 # Portfolio Backend
 
-Express + MongoDB Atlas backend for the portfolio contact form.
+This directory contains the backend code for my personal portfolio website. It is a Node.js application built with Express, responsible for handling the contact form, serving profile data, and managing project information.
+
+## Stack
+
+*   **Framework**: Express.js
+*   **Database**: MongoDB Atlas with Mongoose for object data modeling.
+*   **Email**: Nodemailer for sending contact form confirmation emails.
+
+## Project Structure
+
+The backend handles contact form submissions from the portfolio's frontend. It stores the messages in a MongoDB Atlas database and sends a confirmation email to the visitor. It also provides several API endpoints to serve portfolio content like profile information, project details, and the resume.
 
 ## Setup
 
