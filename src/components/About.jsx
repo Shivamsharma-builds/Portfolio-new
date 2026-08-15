@@ -1,12 +1,12 @@
 import { FiUser, FiAward, FiBookOpen, FiBriefcase } from 'react-icons/fi'
-import profile2 from '../assets/images/profile2.png'
+import profile2 from '../assets/images/profile2.webp'
 
 const About = () => {
   const stats = [
     { icon: FiBookOpen, label: 'Years of Study', value: '4+' },
-    { icon: FiBriefcase, label: 'Projects Done', value: '5+' },
+    { icon: FiBriefcase, label: 'Projects Done', value: '15+' },
     { icon: FiAward, label: 'Certificates', value: '10+' },
-    { icon: FiUser, label: 'Happy Clients', value: '2+' },
+    { icon: FiUser, label: 'Happy Clients', value: '5+' },
   ]
 
   return (
@@ -28,6 +28,8 @@ const About = () => {
                 src={profile2}
                 alt="About Me"
                 className="rounded-2xl w-full"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

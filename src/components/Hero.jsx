@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { FiDownload, FiMail, FiArrowDown } from 'react-icons/fi'
 import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa'
 
-import profile1 from '../assets/images/profile1.png'
+import profile1 from '../assets/images/profile1.webp'
 const Hero = () => {
   const openResume = (event) => {
     event.preventDefault()
@@ -103,6 +103,8 @@ const Hero = () => {
                   src={profile1}
                   alt="Profile"
                   className="w-full h-full object-cover"
+                  fetchPriority="high"
+                  decoding="async"
                 />
               </div>
 

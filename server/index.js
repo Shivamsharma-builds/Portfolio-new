@@ -1,42 +1,32 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import mongoose from 'mongoose'
+import { connectDatabase } from './lib/db.js'
+import { ContactMessage } from './models/ContactMessage.js'
 import { sendContactConfirmation } from './email.js'
+import { clean, isValidEmail } from './lib/http.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 const app = express()
 const PORT = Number(process.env.PORT || 5000)
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'
-const RESUME_FILE = path.join(__dirname, '..', 'public', 'resume.pdf')
 
 app.use(cors({ origin: CLIENT_ORIGIN, methods: ['GET', 'POST'] }))
 app.use(express.json({ limit: '20kb' }))
 
-const contactSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, trim: true, maxlength: 80 },
-    email: { type: String, required: true, trim: true, lowercase: true, maxlength: 160 },
-    subject: { type: String, trim: true, maxlength: 160, default: '' },
-    message: { type: String, required: true, trim: true, maxlength: 3000 },
-  },
-  { timestamps: true }
-)
-
-const ContactMessage = mongoose.model('ContactMessage', contactSchema)
-
-const clean = (value, maxLength) => String(value ?? '').trim().slice(0, maxLength)
-
-app.get('/api/health', (_req, res) => {
-  res.json({
-    status: mongoose.connection.readyState === 1 ? 'ok' : 'degraded',
-    service: 'portfolio-api',
-    database: mongoose.connection.readyState === 1 ? 'mongodb' : 'disconnected',
-    timestamp: new Date().toISOString(),
-  })
+app.get('/api/health', async (_req, res) => {
+  try {
+    await connectDatabase()
+    return res.json({
+      status: mongoose.connection.readyState === 1 ? 'ok' : 'degraded',
+      service: 'portfolio-api',
+      database: mongoose.connection.readyState === 1 ? 'mongodb' : 'disconnected',
+      timestamp: new Date().toISOString(),
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(503).json({ status: 'degraded', service: 'portfolio-api', database: 'disconnected' })
+  }
 })
 
 app.get('/api/profile', (_req, res) => {
@@ -71,50 +61,34 @@ app.get('/api/projects', (_req, res) => {
   ])
 })
 
-app.post('/api/contact', async (req, res, next) => {
+app.post('/api/contact', async (req, res) => {
   try {
-    const name = clean(req.body.name, 80)
-    const email = clean(req.body.email, 160)
-    const subject = clean(req.body.subject, 160)
-    const message = clean(req.body.message, 3000)
-
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: 'Name, email and message are required.' })
+    const body = req.body && typeof req.body === 'object' ? req.body : {}
+    if (clean(body.website, 200)) {
+      return res.status(200).json({ success: true, message: 'Thanks! Your message has been received.', confirmationEmailSent: false })
     }
 
-    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    if (!emailIsValid) {
-      return res.status(400).json({ error: 'Please provide a valid email address.' })
-    }
+    const name = clean(body.name, 80)
+    const email = clean(body.email, 160).toLowerCase()
+    const subject = clean(body.subject, 160)
+    const message = clean(body.message, 3000)
 
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ error: 'Database is unavailable. Please try again later.' })
-    }
+    if (!name || !email || !message) return res.status(400).json({ error: 'Name, email and message are required.' })
+    if (!isValidEmail(email)) return res.status(400).json({ error: 'Please provide a valid email address.' })
 
+    await connectDatabase()
     const normalizedSubject = subject || `Portfolio Contact from ${name}`
-
-    const entry = await ContactMessage.create({
-      name,
-      email,
-      subject: normalizedSubject,
-      message,
-    })
+    const entry = await ContactMessage.create({ name, email, subject: normalizedSubject, message })
 
     let confirmationEmailSent = false
     try {
-      await sendContactConfirmation({
-        name,
-        email,
-        subject: normalizedSubject,
-      })
+      await sendContactConfirmation({ name, email, subject: normalizedSubject })
       confirmationEmailSent = true
     } catch (emailError) {
-      // The contact is already stored, so an email provider failure should not
-      // make the user submit the form again. Log it for the site owner.
       console.error('Confirmation email failed:', emailError.message)
     }
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: confirmationEmailSent
         ? 'Thanks! Your message has been received. A confirmation email has been sent to you.'
@@ -123,47 +97,22 @@ app.post('/api/contact', async (req, res, next) => {
       id: entry._id,
     })
   } catch (error) {
-    next(error)
+    console.error(error)
+    return res.status(500).json({ error: 'Unable to process your message right now. Please try again later.' })
   }
 })
 
-app.get('/api/resume', (_req, res) => {
-  res.sendFile(RESUME_FILE, (error) => {
-    if (error && !res.headersSent) {
-      res.status(error.statusCode || 404).json({
-        error: 'Resume PDF not found. Add public/resume.pdf to the project.',
-      })
-    }
-  })
-})
+app.get('/api/resume', (_req, res) => res.redirect(302, '/resume.pdf'))
 
-app.use((err, _req, res, _next) => {
-  console.error(err)
-  res.status(500).json({ error: 'Internal server error.' })
-})
+app.use((_req, res) => res.status(404).json({ error: 'API route not found.' }))
 
-const startServer = async () => {
-  const mongoUri = process.env.MONGODB_URI
-
-  if (!mongoUri || mongoUri.includes('<db_password>')) {
-    console.error('Missing MONGODB_URI. Add your MongoDB Atlas URI to .env and replace <db_password>.')
-    process.exit(1)
-  }
-
-  try {
-    await mongoose.connect(mongoUri, {
-      dbName: process.env.MONGODB_DB_NAME || 'portfolio',
-      serverSelectionTimeoutMS: 10000,
+if (process.env.NODE_ENV !== 'production') {
+  connectDatabase()
+    .then(() => app.listen(PORT, () => console.log(`Portfolio API running on http://localhost:${PORT}`)))
+    .catch((error) => {
+      console.error('MongoDB connection failed:', error.message)
+      process.exit(1)
     })
-
-    console.log(`MongoDB connected: ${mongoose.connection.host}`)
-    app.listen(PORT, () => {
-      console.log(`Portfolio API running on http://localhost:${PORT}`)
-    })
-  } catch (error) {
-    console.error('MongoDB connection failed:', error.message)
-    process.exit(1)
-  }
 }
 
-startServer()
+export default app

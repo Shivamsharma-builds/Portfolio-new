@@ -3,133 +3,61 @@ import { FiGithub, FiExternalLink } from 'react-icons/fi'
 
 const Projects = () => {
   const projects = [
-  {
-    title: 'OutreachX',
-    description:
-      'An agentic AI campaign automation platform with multi-step workflow orchestration for WhatsApp, voice notes, and AI phone calls. Includes RAG-based document-grounded replies and real-time campaign analytics.',
-    image: '/images/outreachx.png',
-    tags: [
-      'Next.js',
-      'Node.js',
-      'Firebase',
-      'LangChain',
-      'OpenRouter',
-      'VAPI',
-      'Twilio',
-      'Pinecone'
-    ],
-    github: 'https://github.com',
-    demo: 'https://outreachx.com',
-    featured: true
-  },
-
-  {
-    title: 'Avento',
-    description:
-      'A RAG-powered customer support SaaS that enables businesses to deploy context-aware chatbot widgets on Framer and custom websites. Features document ingestion, chatbot analytics, knowledge-gap detection, branding controls, and AI voice support.',
-    image: '/images/avento.png',
-    tags: [
-      'Next.js 15',
-      'MongoDB Atlas',
-      'Pinecone',
-      'OpenRouter',
-      'Clerk',
-      'RAG'
-    ],
-    github: 'https://github.com',
-    demo: 'https://avento.com',
-    featured: true
-  },
-
-  {
-    title: 'Perception',
-    description:
-      'A multilingual social sentiment intelligence platform for brand monitoring. It ingests social media mentions, classifies posts using an LLM-powered CX triage engine, and provides conversational analytics with chart-backed insights.',
-    image: '/images/perception.png',
-    tags: [
-      'Next.js',
-      'FastAPI',
-      'MongoDB',
-      'Apify',
-      'LangChain',
-      'LLM'
-    ],
-    github: 'https://github.com',
-    demo: 'https://perception.com',
-    featured: true
-  },
-
-  {
-    title: 'Gatherly',
-    description:
-      'A full-stack event management platform that allows organizers to create events, manage RSVPs, publish public event pages, and handle attendee approval workflows with integrated transactional emails and Zoom meeting synchronization.',
-    image: '/images/gatherly.png',
-    tags: [
-      'Next.js',
-      'React',
-      'TypeScript',
-      'MongoDB',
-      'Mongoose',
-      'Clerk',
-      'Nodemailer',
-      'Zoom OAuth'
-    ],
-    github: 'https://github.com',
-    demo: 'https://gatherly.com',
-    featured: true
-  },
-
-  {
-    title: 'Crop Prediction Using AI',
-    description:
-      'An AI-based agricultural prediction system that recommends suitable crop types and expected yield based on environmental and soil parameters, helping improve agricultural productivity and reduce crop failure risk.',
-    image: '/images/crop-prediction.png',
-    tags: [
-      'Gen AI',
-      'MERN Stack',
-      'MongoDB',
-      'React',
-      'Node.js'
-    ],
-    github: 'https://github.com/Shivamsharma-builds/Hacktopus-Tech-Triran',
-    demo: 'https://ai-crop-prediction.onrender.com',
-    featured: false
-  },
-
-  {
-    title: 'HTTP Web Server',
-    description:
-      'A C++ HTTP server supporting GET, POST, and DELETE methods, cookies, CGI, file uploads and downloads, and static content delivery. Implemented non-blocking I/O to handle multiple clients concurrently.',
-    image: '/images/http-server.png',
-    tags: [
-      'C++',
-      'HTTP',
-      'TCP/IP',
-      'Non-Blocking I/O',
-      'CGI',
-      'Network Programming'
-    ],
-    github: 'https://github.com/Shivamsharma-builds/HTTP_Server',
-    demo: '#',
-    featured: false
-  },
-
-  {
-    title: 'Personal Portfolio Website',
-    description:
-      'A responsive personal portfolio website designed to showcase projects, technical skills, and software engineering experience with a modern custom UI optimized for different screen sizes.',
-    image: '/images/portfolio.png',
-    tags: [
-      'HTML5',
-      'CSS3',
-      'JavaScript',
-      'Responsive Design'
-    ],
-    github: 'https://github.com/Shivamsharma-builds/portfolio',
-    demo: 'https://shivamsharmadiatm.netlify.app',
-    featured: false
-  }
-];
+    {
+      title: 'AI-Powered Study Assistant',
+      description: 'A web application that uses NLP to help students generate summaries, flashcards, and quizzes from their study materials.',
+      image: 'https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&h=500&fit=crop',
+      tags: ['React', 'Node.js', 'OpenAI API', 'MongoDB'],
+      github: 'https://github.com',
+      demo: 'https://demo.com',
+      featured: true
+    },
+    {
+      title: 'E-Commerce Platform',
+      description: 'Full-stack e-commerce solution with cart, payment integration, and admin dashboard.',
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop',
+      tags: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind'],
+      github: 'https://github.com',
+      demo: 'https://demo.com',
+      featured: true
+    },
+    {
+      title: 'Task Management App',
+      description: 'A collaborative task management tool with real-time updates and team features.',
+      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=500&fit=crop',
+      tags: ['React', 'Firebase', 'Tailwind CSS'],
+      github: 'https://github.com',
+      demo: 'https://demo.com',
+      featured: false
+    },
+    {
+      title: 'Weather Dashboard',
+      description: 'A beautiful weather app with location-based forecasts and interactive maps.',
+      image: 'https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&h=500&fit=crop',
+      tags: ['Vue.js', 'Weather API', 'Chart.js'],
+      github: 'https://github.com',
+      demo: 'https://demo.com',
+      featured: false
+    },
+    {
+      title: 'Portfolio Website Generator',
+      description: 'A tool that generates portfolio websites from JSON configurations.',
+      image: 'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=500&fit=crop',
+      tags: ['React', 'Node.js', 'Express'],
+      github: 'https://github.com',
+      demo: 'https://demo.com',
+      featured: false
+    },
+    {
+      title: 'College Event Portal',
+      description: 'A portal for managing and discovering college events with registration system.',
+      image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&h=500&fit=crop',
+      tags: ['MERN Stack', 'JWT', 'Socket.io'],
+      github: 'https://github.com',
+      demo: 'https://demo.com',
+      featured: false
+    },
+  ]
 
   return (
     <section id="projects" className="py-20 px-6 section-fade gsap-section">
@@ -220,7 +148,7 @@ const Projects = () => {
         {/* View More */}
         <div className="text-center mt-12">
           <a
-            href="https://github.com/Shivamsharma-builds"
+            href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 glass rounded-full text-white font-semibold hover:bg-white/10 transition-all"

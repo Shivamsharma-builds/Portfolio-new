@@ -1,117 +1,538 @@
-# My Personal Portfolio
+# Shivam Sharma — Portfolio
 
-This repository hosts the complete codebase for my personal portfolio website, designed to showcase my projects, skills, and provide a convenient way for visitors to get in touch. The application is structured into a frontend (React-based) and a backend (Node.js/Express) to ensure a robust and scalable architecture.
+Production-ready React/Vite portfolio with a Vercel serverless API, MongoDB Atlas contact storage, and Nodemailer confirmation emails.
+
+## Production architecture
+
+```text
+Browser
+  │
+  ├── React + Vite static app
+  │       └── /resume.pdf
+  │
+  └── same-origin /api/*
+          ├── /api/health
+          ├── /api/profile
+          ├── /api/projects
+          └── /api/contact
+                  │
+                  ├── MongoDB Atlas
+                  └── SMTP / Nodemailer
+```
+
+The production deployment uses **one Vercel project**. The frontend is served by Vite and the files in the root `api/` directory are deployed as Vercel Node.js Functions.
+
+The production frontend calls the API with same-origin paths such as `/api/contact`; no production `VITE_API_URL` is required.
+
+---
 
 ## Features
 
-*   **Dynamic Project Display**: Easily manage and display a diverse range of projects with detailed descriptions and links.
-*   **Contact Form**: A fully functional contact form that allows visitors to send messages directly, with confirmation emails for successful submissions.
-*   **Profile Management**: Serves up-to-date profile information and a downloadable resume.
-*   **Responsive Design**: Ensures a seamless experience across various devices and screen sizes.
-*   **Modern Technology Stack**: Built with contemporary and efficient technologies for performance and maintainability.
+- Responsive React portfolio
+- Dynamic project and profile sections
+- Contact form with server-side validation
+- Contact messages stored in MongoDB Atlas
+- Confirmation email through Nodemailer
+- Static downloadable resume at `/resume.pdf`
+- Same-origin Vercel API
+- Basic honeypot protection for contact submissions
+- Optimized WebP profile images
+- Lazy loading for below-the-fold imagery
+- Deferred animation-library loading
+- Vite production build optimization
 
-## Technology Stack
+---
+
+## Technology stack
 
 ### Frontend
 
-*   **Framework**: React.js - A declarative, component-based JavaScript library for building user interfaces.
-*   **Build Tool**: Vite - A fast development build tool that provides instant server start and lightning-fast HMR.
-*   **Icons**: React Icons - Popular icon libraries integrated as React components for easy use.
-*   **Motion**: Framer Motion - A production-ready motion library for React. (Assumed based on common portfolio practices)
-*   **Scrolling**: Lenis - A smooth scrolling library. (Assumed based on common portfolio practices)
-*   **Animations**: GSAP + ScrollTrigger - A powerful animation library for JavaScript, often used with ScrollTrigger for scroll-based animations. (Assumed based on common portfolio practices)
+- React
+- Vite
+- React Icons
+- Tailwind CSS / project styling
+- Framer Motion
+- Lenis
+- GSAP + ScrollTrigger
 
 ### Backend
 
-*   **Framework**: Express.js - A minimalist web framework for Node.js, used for building robust APIs.
-*   **Database**: MongoDB Atlas - A cloud-based NoSQL database service for storing contact messages, profile data, and project information.
-*   **ORM**: Mongoose - An elegant MongoDB object modeling tool for Node.js, simplifying data interaction.
-*   **Email Service**: Nodemailer - A module for Node.js applications to allow easy email sending, used for contact form confirmations.
+- Vercel Node.js Functions
+- MongoDB Atlas
+- Mongoose
+- Nodemailer
 
-## Project Structure
+### Local development backend
 
-The project is divided into two main parts:
+An Express server is retained for local development where applicable. Production API routes are handled by Vercel Functions in `api/`.
 
-*   **`client/`**: Contains the React frontend application.
-*   **`server/`**: Contains the Node.js/Express backend API.
+---
 
-The backend handles contact form submissions, storing messages in a MongoDB Atlas database and sending confirmation emails. It also exposes API endpoints to serve portfolio content such as profile details, project information, and the resume.
+## Project structure
 
-## Setup
-
-To get the project up and running on your local machine, follow these steps:
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/your-portfolio.git
-cd your-portfolio
+```text
+Portfolio/
+├── api/
+│   ├── health.js
+│   ├── profile.js
+│   ├── projects.js
+│   └── contact.js
+│
+├── server/
+│   ├── db.js
+│   ├── email.js
+│   └── ...
+│
+├── src/
+│   ├── components/
+│   ├── assets/
+│   └── ...
+│
+├── public/
+│   └── resume.pdf
+│
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── vercel.json
+└── README.md
 ```
 
-### 2. Backend Setup
+---
 
-Navigate to the `server` directory and install dependencies:
+## Local development
+
+### 1. Install dependencies
+
+From the project root:
 
 ```bash
-cd server
 npm install
 ```
 
-Configure environment variables:
+### 2. Configure environment variables
 
-1.  Copy `.env.example` to `.env`.
-2.  Replace `<db_password>` in `MONGODB_URI` with the password for your MongoDB Atlas database user.
-3.  Ensure your MongoDB Atlas Network Access allows the machine running the backend to connect.
-4.  Configure email settings for Nodemailer in `.env`:
-    ```env
-    SMTP_HOST=smtp.example.com
-    SMTP_PORT=465
-    SMTP_SECURE=true
-    SMTP_USER=your-email@example.com
-    SMTP_PASS=your-email-password-or-app-password
-    MAIL_FROM="Your Name <your-email@example.com>"
-    ```
-    *For Gmail, enable 2-Step Verification and create a Google App Password. Use the App Password as `SMTP_PASS`.*
-
-### 3. Frontend Setup
-
-Navigate to the `client` directory and install dependencies:
+Copy the example environment file:
 
 ```bash
-cd ../client # Go back to the root and then into client
-npm install
+cp .env.example .env
 ```
 
-## Usage
+On Windows PowerShell:
 
-### Start the Backend Server
-
-From the `server` directory:
-
-```bash
-npm run server
+```powershell
+Copy-Item .env.example .env
 ```
 
-The API will run on `http://localhost:5000` by default.
+Fill in the required local credentials. Never commit `.env`.
 
-### Start the Frontend Development Server
-
-From the `client` directory:
+### 3. Run the Vite application
 
 ```bash
 npm run dev
 ```
 
-The frontend application will typically run on `http://localhost:5173` (or another available port) and will automatically open in your browser.
+The frontend normally runs at:
 
-## API Endpoints (Backend)
+```text
+http://localhost:5173
+```
 
-*   `GET /api/health` - Checks API and database health.
-*   `GET /api/profile` - Retrieves portfolio profile data.
-*   `GET /api/projects` - Retrieves project data.
-*   `POST /api/contact` - Stores a contact message in MongoDB and sends a confirmation email.
-*   `GET /api/resume` - Serves the `public/resume.pdf` file.
+### 4. Run the local full-stack development setup
 
-Contact messages are stored in the `portfolio` database in the `contactmessages` collection.
+If the project includes the local Express development server and the corresponding script:
 
-## License
+```bash
+npm run dev:full
+```
+
+The local Express API normally runs at:
+
+```text
+http://localhost:5000
+```
+
+### 5. Test the Vercel-style environment locally
+
+Install the Vercel CLI if needed:
+
+```bash
+npm install -g vercel
+```
+
+Then:
+
+```bash
+vercel dev
+```
+
+This is useful for testing the root `/api/*` Functions and Vercel routing before production deployment.
+
+---
+
+# Production deployment on Vercel
+
+## 1. Push the project to GitHub
+
+Commit the project source code, but **never commit `.env` or production credentials**.
+
+Check before pushing:
+
+```bash
+git status
+```
+
+You can also verify that `.env` is not tracked:
+
+```bash
+git ls-files .env
+```
+
+That command should return nothing.
+
+---
+
+## 2. Import the repository into Vercel
+
+Open the Vercel dashboard and import the GitHub repository.
+
+Recommended project settings:
+
+```text
+Framework Preset: Vite
+Root Directory: ./
+Build Command: npm run build
+Output Directory: dist
+Install Command: npm install
+```
+
+No separate frontend/backend Vercel projects are required for this architecture.
+
+---
+
+## 3. Add environment variables
+
+In:
+
+```text
+Vercel
+→ Project
+→ Settings
+→ Environment Variables
+```
+
+Add the following to the **Production** environment:
+
+```text
+MONGODB_URI
+MONGODB_DB_NAME
+
+PORTFOLIO_NAME
+CONTACT_EMAIL
+CONTACT_PHONE
+CONTACT_LOCATION
+CONTACT_AVAILABILITY
+
+GITHUB_URL
+LINKEDIN_URL
+TWITTER_URL
+
+SMTP_HOST
+SMTP_PORT
+SMTP_SECURE
+SMTP_USER
+SMTP_PASS
+MAIL_FROM
+```
+
+Keep MongoDB and SMTP credentials server-side.
+
+Do **not** expose these as `VITE_*` variables.
+
+The frontend should call:
+
+```js
+fetch('/api/contact', ...)
+```
+
+rather than a hardcoded localhost or production API URL.
+
+---
+
+## 4. Configure MongoDB Atlas
+
+Create a MongoDB Atlas database user with a strong password.
+
+Configure Atlas Network Access so the deployed application can connect to the cluster.
+
+If a database password has previously been exposed, rotate it before production.
+
+Use the complete MongoDB connection string as the value of:
+
+```text
+MONGODB_URI
+```
+
+and keep the database name in:
+
+```text
+MONGODB_DB_NAME
+```
+
+---
+
+## 5. Configure SMTP / Nodemailer
+
+Provide the SMTP credentials through Vercel environment variables:
+
+```env
+SMTP_HOST=smtp.example.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=your-email@example.com
+SMTP_PASS=your-email-password-or-app-password
+MAIL_FROM="Your Name <your-email@example.com>"
+```
+
+For Gmail, use a Google App Password rather than your normal account password.
+
+---
+
+## 6. Build locally before deployment
+
+Run:
+
+```bash
+npm run build
+```
+
+A successful build ends with:
+
+```text
+✓ built in ...
+```
+
+Warnings about large chunks do not necessarily mean the build failed.
+
+For this project, the Vite chunk warning threshold is configured as a reporting threshold only. It does not make the JavaScript bundle smaller.
+
+---
+
+## 7. Deploy a Vercel preview
+
+From the project root:
+
+```bash
+vercel
+```
+
+Test the preview deployment before production.
+
+Verify:
+
+```text
+/
+ /resume.pdf
+ /api/health
+ /api/profile
+ /api/projects
+Contact form
+MongoDB contact record
+Confirmation email
+```
+
+For the contact form, verify all three parts:
+
+```text
+Contact form
+    ↓
+POST /api/contact
+    ↓
+MongoDB Atlas
+    +
+Nodemailer confirmation email
+```
+
+---
+
+## 8. Deploy production
+
+Once the preview works:
+
+```bash
+vercel --prod
+```
+
+If the GitHub repository is connected to Vercel, pushing to the configured production branch can also trigger a production deployment automatically.
+
+---
+
+# API
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/health` | API and MongoDB health check |
+| GET | `/api/profile` | Portfolio profile data |
+| GET | `/api/projects` | Project data |
+| POST | `/api/contact` | Store contact message and send confirmation email |
+| GET | `/resume.pdf` | Static resume |
+
+Production clients should use `/resume.pdf` directly.
+
+---
+
+# Contact form flow
+
+```text
+Visitor
+   │
+   ▼
+React Contact Form
+   │
+   │ POST /api/contact
+   ▼
+Vercel Function
+   │
+   ├── Validate input
+   │
+   ├── Check honeypot
+   │
+   ├── Save contact
+   │      │
+   │      ▼
+   │   MongoDB Atlas
+   │
+   └── Send confirmation
+          │
+          ▼
+       Nodemailer
+```
+
+A successful database write should not be discarded solely because confirmation-email delivery fails.
+
+---
+
+# Security
+
+- Never commit `.env`.
+- Keep MongoDB credentials server-side.
+- Keep SMTP credentials server-side.
+- Validate and length-limit contact form input on the server.
+- Use the hidden honeypot field to reduce basic automated submissions.
+- Use same-origin `/api/*` requests in production.
+- Rotate credentials immediately if they have been exposed.
+- Do not put secrets in `VITE_*` variables.
+
+---
+
+# Performance optimizations
+
+The production build includes:
+
+- `profile1.png` and `profile2.png` converted to WebP.
+- Hero profile image prioritized with `fetchPriority="high"`.
+- Below-the-fold About image lazy-loaded.
+- GSAP, ScrollTrigger, and Lenis loading deferred so animation dependencies can be split from the initial application chunk.
+- Production source maps disabled.
+- Vite chunk warning threshold set to `600 kB` as a reporting threshold only.
+
+The chunk warning threshold does **not** reduce bundle size. Actual performance improvements come from image optimization, code splitting, and deferred loading.
+
+---
+
+# Useful commands
+
+Install:
+
+```bash
+npm install
+```
+
+Development:
+
+```bash
+npm run dev
+```
+
+Full local development, if configured:
+
+```bash
+npm run dev:full
+```
+
+Production build:
+
+```bash
+npm run build
+```
+
+Vercel preview:
+
+```bash
+vercel
+```
+
+Vercel production:
+
+```bash
+vercel --prod
+```
+
+---
+
+# Troubleshooting
+
+### `npm run build` fails
+
+Run:
+
+```bash
+npm install
+npm run build
+```
+
+Then inspect the first actual error above the final Vite summary.
+
+### `/api/contact` returns 500
+
+Check:
+
+- `MONGODB_URI`
+- `MONGODB_DB_NAME`
+- MongoDB Atlas Network Access
+- SMTP environment variables
+- Vercel Function logs
+
+### Contact saves but email is not received
+
+Check:
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `MAIL_FROM`
+
+Also check spam/junk folders and your SMTP provider's delivery logs.
+
+### `/api/*` works locally but not on Vercel
+
+Confirm that the production project contains the root:
+
+```text
+api/
+```
+
+directory and that the environment variables are configured for the **Production** environment.
+
+### MongoDB connection errors
+
+Verify the Atlas connection string, database-user password, and Network Access configuration. Rotate the database-user password if the previous password was exposed.
+
+---
+
+# License
+
+This portfolio is personal project code.

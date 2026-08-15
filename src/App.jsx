@@ -1,7 +1,4 @@
 import { useEffect, useState } from 'react'
-import Lenis from 'lenis'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -13,8 +10,6 @@ import Certificates from './components/Certificates'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ResumeModal from './components/ResumeModal'
-
-gsap.registerPlugin(ScrollTrigger)
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -35,81 +30,103 @@ function App() {
   useEffect(() => {
     if (loading) return undefined
 
-    // Lenis provides smooth, momentum-based scrolling.
-    const lenis = new Lenis({
-      duration: 1.15,
-      smoothWheel: true,
-      syncTouch: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.1,
-    })
+    let cancelled = false
+    let cleanup = () => {}
 
-    const onLenisScroll = () => ScrollTrigger.update()
-    lenis.on('scroll', onLenisScroll)
+    const setupAnimations = async () => {
+      // Load the animation stack after the initial UI is ready so GSAP/Lenis
+      // don't unnecessarily inflate the initial JavaScript chunk.
+      const [{ default: Lenis }, { default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import('lenis'),
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ])
 
-    const raf = (time) => {
-      lenis.raf(time * 1000)
-    }
+      if (cancelled) return
 
-    gsap.ticker.add(raf)
-    gsap.ticker.lagSmoothing(0)
+      gsap.registerPlugin(ScrollTrigger)
 
-    // GSAP drives section reveals and keeps them synchronized with Lenis.
-    const ctx = gsap.context(() => {
-      gsap.utils.toArray('.gsap-section').forEach((section) => {
-        gsap.fromTo(
-          section,
-          { y: 55, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 88%',
-              toggleActions: 'play none none reverse',
-            },
-          },
-        )
+      const lenis = new Lenis({
+        duration: 1.15,
+        smoothWheel: true,
+        syncTouch: true,
+        wheelMultiplier: 0.9,
+        touchMultiplier: 1.1,
       })
 
-      ;['.experience-card', '.education-card'].forEach((selector) => {
-        gsap.utils.toArray(selector).forEach((card, index) => {
+      const onLenisScroll = () => ScrollTrigger.update()
+      lenis.on('scroll', onLenisScroll)
+
+      const raf = (time) => {
+        lenis.raf(time * 1000)
+      }
+
+      gsap.ticker.add(raf)
+      gsap.ticker.lagSmoothing(0)
+
+      const ctx = gsap.context(() => {
+        gsap.utils.toArray('.gsap-section').forEach((section) => {
           gsap.fromTo(
-            card,
-            { opacity: 0, x: index % 2 === 0 ? -70 : 70, rotateY: index % 2 === 0 ? -5 : 5 },
+            section,
+            { y: 55, opacity: 0 },
             {
+              y: 0,
               opacity: 1,
-              x: 0,
-              rotateY: 0,
               duration: 0.9,
-              delay: index * 0.12,
               ease: 'power3.out',
               scrollTrigger: {
-                trigger: card,
-                start: 'top 86%',
+                trigger: section,
+                start: 'top 88%',
                 toggleActions: 'play none none reverse',
               },
             },
           )
         })
+
+        ;['.experience-card', '.education-card'].forEach((selector) => {
+          gsap.utils.toArray(selector).forEach((card, index) => {
+            gsap.fromTo(
+              card,
+              { opacity: 0, x: index % 2 === 0 ? -70 : 70, rotateY: index % 2 === 0 ? -5 : 5 },
+              {
+                opacity: 1,
+                x: 0,
+                rotateY: 0,
+                duration: 0.9,
+                delay: index * 0.12,
+                ease: 'power3.out',
+                scrollTrigger: {
+                  trigger: card,
+                  start: 'top 86%',
+                  toggleActions: 'play none none reverse',
+                },
+              },
+            )
+          })
+        })
+
+        gsap.fromTo(
+          '.gsap-navbar',
+          { y: -24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+        )
       })
 
-      gsap.fromTo(
-        '.gsap-navbar',
-        { y: -24, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-      )
-    })
+      ScrollTrigger.refresh()
 
-    ScrollTrigger.refresh()
+      cleanup = () => {
+        ctx.revert()
+        lenis.off('scroll', onLenisScroll)
+        gsap.ticker.remove(raf)
+        lenis.destroy()
+      }
+    }
+
+    setupAnimations()
 
     return () => {
-      ctx.revert()
-      lenis.off('scroll', onLenisScroll)
-      gsap.ticker.remove(raf)
-      lenis.destroy()
+      cancelled = true
+      cleanup()
     }
   }, [loading])
 
